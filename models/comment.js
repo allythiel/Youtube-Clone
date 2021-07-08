@@ -38,7 +38,7 @@ function validateReply(reply) {
 module.exports = {
     Reply: Reply,
     Comment: Comment,
-    validate: validateComment,
-    validate: validateReply,
 };
 
+exports.validate = validateComment;
+exports.validate = validateReply;
