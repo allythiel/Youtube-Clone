@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 
-const replySchema = mongoose.Schema({
+const replySchema = new mongoose.Schema({
     text: { type: String, required: true, minLength: 5, maxLength: 1000 }, 
     dateAdded: { type: Date, default: Date.now },
 });
 
-const commentSchema = mongoose.Schema({
+const commentSchema = new mongoose.Schema({
     text: { type: String, required: true, minLength: 5, maxLength: 1000 },
     dateAdded: { type: Date, default: Date.now },
     likes: { type: Number, required: true, default: 0 },
