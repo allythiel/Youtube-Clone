@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 
+// get all comments
 router.get('/', async (req, res) => {
    try {
       const comments = await Comment.find();
@@ -13,39 +14,56 @@ router.get('/', async (req, res) => {
 });
 
 
-// // Get card decks by id
-// router.get('/:deckId', async (req, res) => {
+// Get comment by video id
+router.get('/:videoId', async (req, res) => {
+   try {
+      const comment = await Comment.find({ videoId: req.params.videoId });
+      console.log(comment);
+      if (!comment)
+         return res.status(400).send(`The comment with id "${req.params.videoId}" d
+   oes not exist.`);
+      return res.send(comment);
+   } catch (ex) {
+      return res.status(500).send(`Internal Server Error: ${ex}`);
+   }
+});
+
+
+// create new comment
+router.post('/', async (req, res) => {
+   try {
+      // Need to validate body before continuing
+      const { error } = validateComment(req.body);
+      if (error)
+         return res.status(400).send(error);
+
+      const comment = new Comment({
+         text: req.body.text,
+         likes: req.body.likes,
+         dislikes: req.body.dislikes,
+         videoId: req.body.videoId,
+         replies: req.body.cards,
+      });
+      await comment.save();
+      return res.send(comment);
+   } catch (ex) {
+      return res.status(500).send(`Internal Server Error: ${ex}`);
+   }
+});
+
+
+// // reply to comment by video id
+// router.post('/:videoId/comment/:commentId', async (req, res) => {
 //    try {
-//       const comment = await CardDeck.findById(req.params.deckId);
-//       console.log(cardDeck);
-//       if (!cardDeck)
-//          return res.status(400).send(`The card deck with id "${req.params.deckId}" d
+//       const comment = await Comment.find({ videoId: req.params.videoId });
+//       console.log(comment);
+//       if (!comment)
+//          return res.status(400).send(`The comment with id "${req.params.videoId}" d
 //    oes not exist.`);
-//       return res.send(cardDeck);
+//       return res.send(comment);
 //    } catch (ex) {
 //       return res.status(500).send(`Internal Server Error: ${ex}`);
 //    }
 // });
-
-// // create new card deck
-// router.post('/', async (req, res) => {
-//    try {
-//       // Need to validate body before continuing
-//       const { error } = validateCardDeck(req.body);
-//       if (error)
-//          return res.status(400).send(error);
-
-//       const cardDeck = new CardDeck({
-//          title: req.body.title,
-//          description: req.body.description,
-//          cards: req.body.cards,
-//       });
-//       await cardDeck.save();
-//       return res.send(cardDeck);
-//    } catch (ex) {
-//       return res.status(500).send(`Internal Server Error: ${ex}`);
-//    }
-// });
-
 
 module.exports = router;

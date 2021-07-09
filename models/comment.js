@@ -11,7 +11,7 @@ const commentSchema = new mongoose.Schema({
    dateAdded: { type: Date, default: Date.now },
    likes: { type: Number, required: true, default: 0 },
    dislikes: { type: Number, required: true, default: 0 },
-   reply: [{ type: replySchema }],
+   replies: [{ type: replySchema }],
    videoId: { type: String, required: true, minLength: 4, maxLength: 50 },
 });
 
