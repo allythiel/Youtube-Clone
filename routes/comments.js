@@ -52,6 +52,31 @@ router.post('/', async (req, res) => {
 });
 
 
+// Put comment likes & dislikes
+router.put('/:commentId', async (req, res) => {
+   try {
+      const comment = await Comment.findById(req.params.commentId);
+      if (!comment)
+         return res.status(400).send(`The comment with id "${req.params.commentId}" d
+   oes not exist.`);
+
+      // Need to validate body before continuing
+      const { error } = validateComment(req.body);
+      if (error)
+         return res.status(400).send(error);
+
+      // update likes & dislikes
+      comment.likes = req.body.likes
+      comment.dislikes = req.body.dislikes
+
+      await comment.save();
+      return res.send(comment);
+   } catch (ex) {
+      return res.status(500).send(`Internal Server Error: ${ex}`);
+   }
+});
+
+
 // Post reply to comment
 router.post('/:commentId', async (req, res) => {
    try {
