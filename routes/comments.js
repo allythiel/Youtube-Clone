@@ -42,7 +42,7 @@ router.post('/', async (req, res) => {
          likes: req.body.likes,
          dislikes: req.body.dislikes,
          videoId: req.body.videoId,
-         replies: req.body.cards,
+         replies: [],
       });
       await comment.save();
       return res.send(comment);

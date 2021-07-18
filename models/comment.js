@@ -23,6 +23,7 @@ function validateComment(comment) {
       text: Joi.string().min(5).max(1000).required(),
       likes: Joi.number().required(),
       dislikes: Joi.number().required(),
+      replies: Joi.array(),
       videoId: Joi.string().min(4).max(50).required(),
    });
    return schema.validate(comment);
